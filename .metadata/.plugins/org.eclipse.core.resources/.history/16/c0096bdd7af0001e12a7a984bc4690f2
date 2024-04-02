@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<sub-flow name="implementation-health-check-main" doc:id="43af4a93-4090-4903-a998-21a21d657c00" />
+	<sub-flow name="implementation-health-check-db" doc:id="942ece77-ff9d-4c62-be4b-4ac86ad42c7a" >
+		<set-variable value="#[OK]" doc:name="Status DB" doc:id="f73fafc9-bf1e-4876-af59-310f7ebb9af3" variableName="statusDB"/>
+		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="69022404-b12d-4211-8929-b0782c1be606" />
+		<try doc:name="Try" doc:id="7deb54eb-de2b-4d0e-a193-a2f99eca92a8" >
+			<db:select doc:name="Select" doc:id="2546e4c1-3bb6-4cfc-aee3-c50e43713ba1" config-ref="Database_Config">
+			<db:sql><![CDATA[select 0]]></db:sql>
+		</db:select>
+			<error-handler >
+				<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="94e3c8a1-c2ab-4e4c-b53a-d7e4a8cdfafd" >
+					<set-variable value="#[NOK]" doc:name="Status DB1" doc:id="0f41d63e-c81a-4a97-828e-d01a2a965d52" variableName="statusDB" />
+				</on-error-continue>
+			</error-handler>
+		</try>
+	</sub-flow>
+</mule>

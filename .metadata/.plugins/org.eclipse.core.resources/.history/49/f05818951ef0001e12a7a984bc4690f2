@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="testFlow" doc:id="10450d29-5d80-48b1-bab1-b261bd4c03cf" >
+		<http:listener doc:name="Listener" doc:id="31a60a7f-b020-4516-8ac7-eb265be25bf5" config-ref="HTTP_Listener_config" path="/"/>
+		<set-variable value="#[payload]" doc:name="Variavel Payload" doc:id="2c27399d-ca71-41c1-8b62-9539d3010c21" variableName="var1"/>
+		<ee:transform doc:name="Transform Message" doc:id="9fc9f654-5304-48de-aa43-87c2b86fd661">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<flow-ref doc:name="Flow Reference" doc:id="a1bcfd20-3761-4519-9e36-18c5e5b3f392" name="testSub_Flow"/>
+	</flow>
+	<sub-flow name="testSub_Flow" doc:id="c30ed920-5bd1-400a-bb94-d0a3e4e72586" >
+		<ee:transform doc:name="Transform Message" doc:id="4d19eff2-abd3-44a8-ab32-e20ddcc542dd" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	teste: ""
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="a2844db3-ebe3-44e2-8e4a-f008ac6b6b42" />
+	</sub-flow>
+</mule>

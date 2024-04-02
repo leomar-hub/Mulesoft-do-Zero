@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="implementatio-get-usuario-main" doc:id="8adce454-7dae-4bc7-9321-82110a105093" >
+		<flow-ref doc:name="Flow Reference" doc:id="e1e22a49-af03-483c-85ef-20ba41504d8c" name="implementatio-get-usuario-get-usuario-db"/>
+	</sub-flow>
+	<sub-flow name="implementatio-get-usuario-get-usuario-db" doc:id="82b52ea2-cb4e-4417-983c-d015d14bbdea" >
+		<db:select doc:name="Select" doc:id="f0fda6c4-c252-4e8e-bed7-313bc0d4d42f" config-ref="Database_Config">
+			<db:sql ><![CDATA[select 
+	   c.id_client,
+	   c.name,
+       c.lastname,
+	   a.zip_code,
+	   a.city,
+	   a.uf,
+	   a.street,
+	   p.phone_number
+from client c,
+     address a,
+	 phone p 
+where c.id_client = a.id_client 
+  and c.id_client = p.id_client
+  and c.id_client = :pId_cliente]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+	pId_cliente: vars.id_cliente
+}]]]></db:input-parameters>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="b552710d-9bb7-42c8-86ed-2fa12f923bba" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+</mule>

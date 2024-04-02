@@ -1,0 +1,16 @@
+%dw 2.0
+
+type auto_dc22b320_87f4_4137_81eb_450783616cea_Input_Payload = {
+  telefone?: Array<{    numero?: Number,     ddd?: Number,     _?: Any  }>, 
+  endereco?: {
+    cidade: String, 
+    estado: String, 
+    cep: String, 
+    rua: String, 
+    _?: Any
+  }, 
+  nome: String, 
+  sobrenome: String, 
+  _?: Any
+}
+
